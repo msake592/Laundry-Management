@@ -20,7 +20,6 @@ public class Machine {
     @Enumerated(EnumType.STRING)
     private MachineStatus status;
 
-    // JPA için zorunlu boş constructor
     protected Machine() {
     }
 

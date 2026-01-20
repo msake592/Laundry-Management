@@ -1,1 +1,7 @@
 /Users/mahmutsalihkelkit/Documents/dorm-laundry/src/main/java/com/dormlaundry/DormLaundryApplication.java
+/Users/mahmutsalihkelkit/Documents/dorm-laundry/src/main/java/com/dormlaundry/controller/MachineController.java
+/Users/mahmutsalihkelkit/Documents/dorm-laundry/src/main/java/com/dormlaundry/model/Machine.java
+/Users/mahmutsalihkelkit/Documents/dorm-laundry/src/main/java/com/dormlaundry/model/MachineStatus.java
+/Users/mahmutsalihkelkit/Documents/dorm-laundry/src/main/java/com/dormlaundry/model/MachineType.java
+/Users/mahmutsalihkelkit/Documents/dorm-laundry/src/main/java/com/dormlaundry/repository/MachineRepository.java
+/Users/mahmutsalihkelkit/Documents/dorm-laundry/src/main/java/com/dormlaundry/service/MachineService.java
