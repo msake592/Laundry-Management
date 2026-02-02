@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dorm Laundry Reservation</title>
+</head>
+<body>
+
+<h1>Dorm Laundry Reservation</h1>
+
+<hr>
+
+<h3>Create Reservation</h3>
+
+<label>Machine ID:</label>
+<input type="number" id="machineId">
+
+<br><br>
+
+<label>Start Time:</label>
+<input type="datetime-local" id="startTime">
+
+<br><br>
+
+<label>End Time:</label>
+<input type="datetime-local" id="endTime">
+
+<br><br>
+
+<button onclick="createReservation()">Create Reservation</button>
+
+<p id="createResult"></p>
+
+<hr>
+
+<h3>Delete Reservation</h3>
+
+<label>Reservation ID:</label>
+<input type="number" id="deleteId">
+
+<br><br>
+
+<button onclick="deleteReservation()">Delete Reservation</button>
+
+<p id="deleteResult"></p>
+
+<hr>
+
+<h3>Reschedule Reservation</h3>
+
+<label>Reservation ID:</label>
+<input type="number" id="rescheduleId">
+
+<br><br>
+
+<label>New Start Time:</label>
+<input type="datetime-local" id="newStartTime">
+
+<br><br>
+
+<label>New End Time:</label>
+<input type="datetime-local" id="newEndTime">
+
+<br><br>
+
+<button onclick="rescheduleReservation()">Reschedule</button>
+
+<p id="rescheduleResult"></p>
+
+<script src="app.js"></script>
+</body>
+</html>
