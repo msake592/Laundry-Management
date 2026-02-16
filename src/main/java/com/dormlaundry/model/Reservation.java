@@ -12,12 +12,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
 
-@Getter
 @Entity
 @Table(name = "reservations")
 public class Reservation {
+
+    
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +41,29 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
+    public Long getId() {
+        return id;
+    }
+
+    public Machine getMachine() {
+        return machine;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public ReservationStatus getStatus() {
+        return status;
+    }
     
     public void setMachine(Machine machine){
         this.machine=machine;

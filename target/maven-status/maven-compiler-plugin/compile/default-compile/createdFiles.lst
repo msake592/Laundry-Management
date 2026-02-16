@@ -1,1 +1,16 @@
+com/dormlaundry/model/MachineType.class
+com/dormlaundry/model/Reservation.class
+com/dormlaundry/model/ReservationStatus.class
+com/dormlaundry/repository/ReservationRepository.class
+com/dormlaundry/controller/ReservationController.class
+com/dormlaundry/service/MachineService.class
+com/dormlaundry/service/ReservationService.class
 com/dormlaundry/DormLaundryApplication.class
+com/dormlaundry/repository/MachineRepository.class
+com/dormlaundry/model/MachineStatus.class
+com/dormlaundry/exception/ErrorResponse.class
+com/dormlaundry/model/Machine.class
+com/dormlaundry/controller/MachineController.class
+com/dormlaundry/exception/GlobalExceptionHandler.class
+com/dormlaundry/exception/ReservationNotAllowedException.class
+com/dormlaundry/controller/ReservationController$RescheduleRequest.class

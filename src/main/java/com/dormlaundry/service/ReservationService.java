@@ -20,25 +20,31 @@ public class ReservationService {
     private final MachineRepository machineRepository;
 
     public ReservationService(ReservationRepository reservationRepository,
-                              MachineRepository machineRepository) {
+            MachineRepository machineRepository) {
         this.reservationRepository = reservationRepository;
         this.machineRepository = machineRepository;
     }
 
     @Transactional
-    public Reservation createReservation(Long machineId,String userId,LocalDateTime start,LocalDateTime end){
-        Machine machine = machineRepository.findById(machineId).orElseThrow(() -> new ReservationNotAllowedException("Machine not found"));
+    public Reservation createReservation(Long machineId, String userId, LocalDateTime start, LocalDateTime end) {
 
-        if(machine.getStatus()==MachineStatus.BROKEN){
+        Machine machine = machineRepository.findById(machineId)
+                .orElseThrow(() -> new ReservationNotAllowedException("Machine not found"));
+        System.out.println("CREATE RESERVATION CALLED");
+        System.out.println("START = " + start);
+        System.out.println("END = " + end);
+        if (machine.getStatus() == MachineStatus.BROKEN) {
             throw new ReservationNotAllowedException("Machien is broken!");
         }
-        if(start.isBefore(LocalDateTime.now())){
+        if (start.isBefore(LocalDateTime.now())) {
             throw new ReservationNotAllowedException("It is a past time,enter a valid start");
         }
+        if (!end.isAfter(start)) {
+            throw new ReservationNotAllowedException("End time must be after start time");
+        }
 
-        List<Reservation> conflicts =
-                reservationRepository.findConflictingReservations(
-                        machineId, start, end);
+        List<Reservation> conflicts = reservationRepository.findConflictingReservations(
+                machineId, start, end);
 
         if (!conflicts.isEmpty()) {
             throw new ReservationNotAllowedException("Time slot already reserved");
@@ -55,47 +61,48 @@ public class ReservationService {
 
     @Transactional
     public Reservation completeReservation(Long id) {
-   
-    Reservation reservation = reservationRepository.findById(id)
-            .orElseThrow(() -> new ReservationNotAllowedException("Reservation couldn't find!"));
-    reservation.setStatus(ReservationStatus.COMPLETED);
-    return reservationRepository.save(reservation);
-}
 
-@Transactional
-public Reservation rescheduleReservation(Long id, LocalDateTime newStart, LocalDateTime newEnd) {
-
-    Reservation reservation = reservationRepository.findById(id).orElseThrow(()->new ReservationNotAllowedException("Reservation couldn't find!"));
-
-    if (reservation.getStatus() == ReservationStatus.COMPLETED) {
-        throw new ReservationNotAllowedException("Completed reservation cannot be rescheduled");
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ReservationNotAllowedException("Reservation couldn't find!"));
+        reservation.setStatus(ReservationStatus.COMPLETED);
+        return reservationRepository.save(reservation);
     }
 
-    Machine machine = reservation.getMachine();
+    @Transactional
+    public Reservation rescheduleReservation(Long id, LocalDateTime newStart, LocalDateTime newEnd) {
 
-    if (machine.getStatus()==MachineStatus.BROKEN) {
-        throw new ReservationNotAllowedException("Machine is broken");
-    }
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ReservationNotAllowedException("Reservation couldn't find!"));
 
-    if (newStart.isBefore(LocalDateTime.now())) {
-        throw new ReservationNotAllowedException("You must get a time machine for access this machine! It's a past time!");
-    }
+        if (reservation.getStatus() == ReservationStatus.COMPLETED) {
+            throw new ReservationNotAllowedException("Completed reservation cannot be rescheduled");
+        }
 
-    if (!newEnd.isAfter(newStart)) {
-        throw new ReservationNotAllowedException("Start and end times are not comptible!");
-    }
-    
-    List<Reservation> conflicts =
-            reservationRepository.findConflictingReservations(
-                    machine.getId(), newStart, newEnd);
-        for(Reservation r:conflicts){
-            if(!r.getId().equals(reservation.getId())){
+        Machine machine = reservation.getMachine();
+
+        if (machine.getStatus() == MachineStatus.BROKEN) {
+            throw new ReservationNotAllowedException("Machine is broken");
+        }
+
+        if (newStart.isBefore(LocalDateTime.now())) {
+            throw new ReservationNotAllowedException(
+                    "You must get a time machine for access this machine! It's a past time!");
+        }
+
+        if (!newEnd.isAfter(newStart)) {
+            throw new ReservationNotAllowedException("Start and end times are not comptible!");
+        }
+
+        List<Reservation> conflicts = reservationRepository.findConflictingReservations(
+                machine.getId(), newStart, newEnd);
+        for (Reservation r : conflicts) {
+            if (!r.getId().equals(reservation.getId())) {
                 throw new ReservationNotAllowedException("Time slot already reserved");
             }
         }
-    reservation.setStartTime(newStart);
-    reservation.setEndTime(newEnd);
+        reservation.setStartTime(newStart);
+        reservation.setEndTime(newEnd);
 
-    return reservationRepository.save(reservation);
-}
+        return reservationRepository.save(reservation);
+    }
 }

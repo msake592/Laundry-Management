@@ -5,12 +5,19 @@ import java.time.LocalDateTime;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Future;
+import java.time.LocalDateTime;
 import com.dormlaundry.model.Reservation;
 import com.dormlaundry.service.ReservationService;
+
+import jakarta.validation.constraints.Future;
 
 @RestController
 @RequestMapping("/reservations")
@@ -21,6 +28,47 @@ public class ReservationController {
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
+
+    @PostMapping
+public ResponseEntity<Reservation> createReservation(
+        @Valid @RequestBody CreateReservationRequest request) {
+
+    Reservation saved = reservationService.createReservation(
+            request.getMachineId(),
+            request.getUserId(),
+            request.getStartTime(),
+            request.getEndTime()
+    );
+    return ResponseEntity.ok(saved);
+}
+
+
+public static class CreateReservationRequest {
+    @NotNull(message = "machineId is required")
+    private Long machineId;
+
+    @NotBlank(message = "userId is required")
+    private String userId;
+
+    @NotNull(message = "startTime is required")
+    @Future(message = "startTime must be in the future")
+    private LocalDateTime startTime;
+
+    @NotNull(message = "endTime is required")
+    private LocalDateTime endTime;
+
+    public Long getMachineId() { return machineId; }
+    public void setMachineId(Long machineId) { this.machineId = machineId; }
+
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
+
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+
+    public LocalDateTime getEndTime() { return endTime; }
+    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
+}
 
     // -----------------------------
     // COMPLETE RESERVATION
