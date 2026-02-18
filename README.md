@@ -1,49 +1,56 @@
 # Laundry Reservation System
 
-A Spring Boot backend application for managing laundry machine reservations.
+A simple role-based laundry reservation backend built with:
 
-This project demonstrates layered architecture, business rule validation, and REST API design.
-
-## Overview
-
-The system allows:
-
-- Creating and managing laundry machines
-- Creating reservations linked to machines
-- Preventing overlapping reservations
-- Validating time consistency
-- Handling business rule violations with structured error responses
-
-## Architecture
-
-The project follows a layered structure:
-
-Controller → Service → Repository → Database
-
-- Controller: Handles HTTP requests and responses
-- Service: Contains business logic and validation rules
-- Repository: Handles database access using Spring Data JPA
-- Entity: Defines database models (Machine, Reservation)
-- DTO: Separates API request structure from database models
-
-## Business Rules
-
-- Start time must be in the future
-- End time must be after start time
-- Machines marked as BROKEN cannot be reserved
-- Overlapping reservations for the same machine are not allowed
-- Completed reservations cannot be rescheduled
-
-## Technologies
-
-- Java 17
 - Spring Boot
-- Spring Web
-- Spring Data JPA
-- H2 Database
-- Jakarta Validation
+- Spring Security (Basic Auth)
+- PostgreSQL
+- JPA / Hibernate
+
+## Features
+
+- User registration (BCrypt password hashing)
+- Basic Authentication login
+- Role-based access (ADMIN / USER)
+- Machine management (Admin only)
+- Reservation creation
+- Reservation deletion
+- Reservation rescheduling
+- Time conflict validation
+- Start/End time validation
+
+## Tech Stack
+
+- Java 17+
+- Spring Boot 3
+- Spring Security
+- PostgreSQL
 - Maven
 
-## Running the Application
+## Roles
 
-Clone the repository:
+ADMIN:
+- Create machines
+
+USER:
+- Create reservation
+- Delete reservation
+- Reschedule reservation
+
+## Authentication
+
+Basic Authentication is used.
+Credentials must be sent via Authorization header.
+
+## Database
+
+PostgreSQL is required.
+Tables are generated automatically via JPA.
+
+---
+
+This project was built for backend learning purposes and focuses on:
+- REST design
+- Validation
+- Security
+- Role-based UI logic
