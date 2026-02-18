@@ -1,7 +1,16 @@
+const authHeader = localStorage.getItem("authHeader");
+
+function getAuthHeaders(extraHeaders = {}) {
+    return {
+        "Authorization": authHeader,
+        ...extraHeaders
+    };
+}
+
 function createReservation() {
     fetch("/reservations", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
             machineId: document.getElementById("machineId").value,
             startTime: document.getElementById("startTime").value,
@@ -23,7 +32,8 @@ function deleteReservation() {
     const id = document.getElementById("deleteId").value;
 
     fetch(`/reservations/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: getAuthHeaders()
     })
     .then(res => {
         if (res.status === 204) {
@@ -40,7 +50,7 @@ function rescheduleReservation() {
 
     fetch(`/reservations/${id}/reschedule`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
             newStartTime: document.getElementById("newStartTime").value,
             newEndTime: document.getElementById("newEndTime").value
@@ -66,4 +76,23 @@ function handleError(response, elementId) {
         document.getElementById(elementId).innerText = "Time slot conflict";
     else
         document.getElementById(elementId).innerText = "Unexpected error";
+}
+
+function createMachine() {
+    fetch("/machines", {
+        method: "POST",
+        headers: getAuthHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({
+            type: document.getElementById("machineType").value,
+            status: document.getElementById("machineStatus").value
+        })
+    })
+    .then(res => {
+        if (res.status === 200 || res.status === 201) {
+            document.getElementById("machineResult").innerText =
+                "Machine created successfully";
+            return;
+        }
+        handleError(res, "machineResult");
+    });
 }
